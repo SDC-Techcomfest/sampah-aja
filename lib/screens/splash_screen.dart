@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/constants.dart';
 
@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 2), (){
-      //Navigator.of(context).pushNamed('/');
+      Navigator.of(context).pushNamed('/boarding');
     });
   }
 
@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Positioned(
               bottom: 0,
-              child: SvgPicture.asset('assets/images/splash_background.svg')
+              child: Image.asset('assets/images/splash_background.png')
           ),
           Center(
             child: Column(
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Image.asset('assets/images/logo.png'),
                 const SizedBox(height: 10.0,),
-                const Text(Constants.appName)
+                const Text(Constants.appName, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),)
               ],
             ),
           )
