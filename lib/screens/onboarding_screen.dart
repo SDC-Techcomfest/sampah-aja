@@ -84,13 +84,25 @@ class _OnBoardingIndicator extends StatelessWidget {
   }
 
   Widget _dotIndicator(int position, int now) {
-    return Container(
-      margin  : const EdgeInsets.symmetric(horizontal: 8),
-      width: 8,
-      height: 8,
-      color: position == now
-          ? AppTheme.colorPrimary : AppTheme.colorPrimary.withOpacity(0.5),
-    );
+    if (position == now) {
+      return Container(
+        width: 10,
+        height: 10,
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppTheme.colorPrimary),
+      );
+    } else {
+      return Container(
+        width: 8,
+        height: 8,
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppTheme.colorSecondary),
+      );
+    }
   }
 }
 
