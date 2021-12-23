@@ -22,10 +22,12 @@ class CommonButton extends StatelessWidget {
         color: AppTheme.colorPrimary,
         borderRadius: BorderRadius.circular(20)
       ),
-      child: Text(
-        title,
-        style: theme.textTheme.button,
-        textAlign: TextAlign.center,
+      child: Center(
+        child: Text(
+          title,
+          style: theme.textTheme.button,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

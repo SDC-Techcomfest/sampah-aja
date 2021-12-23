@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../components/commons/button.dart';
+import '../utils/routes.dart';
 import '../utils/constants.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,9 +21,25 @@ class _LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        _LoginHeader()
-
+      children: [
+        const _LoginHeader(),
+        const SizedBox(height: 24,),
+        const _LoginEmailInput(),
+        const SizedBox(height: 16,),
+        const _LoginPasswordInput(),
+        const SizedBox(height: 16,),
+        const _LoginButton(),
+        const SizedBox(height: 10,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Sudah memiliki akun ? '),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, Routes.loginScreen),
+              child: const Text('Daftar'),
+            )
+          ],
+        )
       ],
     );
   }
@@ -64,6 +82,67 @@ class _LoginHeader extends StatelessWidget {
     );
   }
 }
+
+class _LoginEmailInput extends StatelessWidget {
+  const _LoginEmailInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: TextField(
+        onChanged: (String value) {},
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18.0)
+          ),
+          hintText: 'Email',
+        ),
+        keyboardType: TextInputType.emailAddress,
+      ),
+    );
+  }
+}
+
+class _LoginPasswordInput extends StatelessWidget {
+  const _LoginPasswordInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: TextField(
+        onChanged: (String value) {},
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0)
+          ),
+          hintText: 'Password',
+        ),
+        obscureText: true,
+        keyboardType: TextInputType.emailAddress,
+      ),
+    );
+  }
+}
+
+
+
+class _LoginButton extends StatelessWidget {
+  const _LoginButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: CommonButton(
+          title: 'Login',
+          onTap: () {}
+      ),
+    );
+  }
+}
+
 
 
 
