@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sampah_aja/utils/routes.dart';
 
+import '../utils/routes.dart';
 import '../components/onboarding_item.dart';
 import '../utils/app_theme.dart';
 import '../cubit/onboarding_cubit.dart';
@@ -126,7 +126,7 @@ class _OnBoardingBottomBar extends StatelessWidget {
 
               TextButton(
                   onPressed: () {
-                    if (snapshot == 3) {
+                    if (snapshot == 2) {
                       Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false);
                     } else {
                       context.read<OnBoardingCubit>().increment();

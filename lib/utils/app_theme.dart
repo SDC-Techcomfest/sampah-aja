@@ -13,6 +13,9 @@ class AppTheme {
         caption: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
         button: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(primary: colorPrimary)
+      )
     );
   }
 

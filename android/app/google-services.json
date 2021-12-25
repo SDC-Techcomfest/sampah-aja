@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1050698336932",
+    "project_id": "sampah-aja",
+    "storage_bucket": "sampah-aja.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050698336932:android:2f29af5fa17d58934c3431",
+        "android_client_info": {
+          "package_name": "com.example.sampah_aja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050698336932-08gr7bvd78kj466l55fag3d1qa9h3kgs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgKIgwbc5yX86WymaC-sQCCVnO_NKDThY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050698336932-08gr7bvd78kj466l55fag3d1qa9h3kgs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
