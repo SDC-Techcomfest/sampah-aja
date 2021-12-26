@@ -177,7 +177,9 @@ class _LoginButton extends StatelessWidget {
           const Center(child: CircularProgressIndicator()) :
           CommonButton(
               title: 'Login',
-              onTap: () => context.read<LoginCubit>().submit()
+              onTap: () {
+                Navigator.pushNamed(context, Routes.guestDashboardScreen);
+              }
           );
         }
       ),

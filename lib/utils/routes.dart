@@ -7,6 +7,7 @@ class Routes {
   static const String onBoardingScreen = "/boarding";
   static const String loginScreen = "/login";
   static const String registerScreen = "/register";
+  static const String guestDashboardScreen = "/guest/dashboard";
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch(settings.name) {
@@ -18,6 +19,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
+      case guestDashboardScreen:
+        return MaterialPageRoute(builder: (_) => const GuestDashboardScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

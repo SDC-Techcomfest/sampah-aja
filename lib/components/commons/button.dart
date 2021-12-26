@@ -15,18 +15,21 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: width ?? size.width,
-      height: height ?? 56.0,
-      decoration: BoxDecoration(
-        color: AppTheme.colorPrimary,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: theme.textTheme.button,
-          textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width ?? size.width,
+        height: height ?? 56.0,
+        decoration: BoxDecoration(
+          color: AppTheme.colorPrimary,
+          borderRadius: BorderRadius.circular(20)
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: theme.textTheme.button,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
