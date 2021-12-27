@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../models/feed_model.dart';
+import '../components/feed_item.dart';
 import '../utils/app_theme.dart';
+
+final dummyFeed = [
+  FeedModel(
+      title: 'Timbunan sampah meningkat di daerah Surabaya!',
+      imageUrl: 'https://akcdn.detik.net.id/community/media/visual/2021/06/24/tumpukan-sampah-berserakan-di-labuhanbatu-1.jpeg'
+  )
+];
 
 class GuestDashboardScreen extends StatelessWidget {
   const GuestDashboardScreen({Key? key}) : super(key: key);
@@ -8,6 +17,7 @@ class GuestDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
     return Scaffold(
       body: Column(
         children: [
@@ -38,6 +48,24 @@ class GuestDashboardScreen extends StatelessWidget {
                   )
               )
             ],
+          ),
+          ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              Image.asset('assets/images/banner_dashboard.ong', width: 327, height: 131),
+              const SizedBox(width: 16.0),
+              Image.asset('assets/images/banner_dashboard.ong', width: 327, height: 131)
+            ],
+          ),
+          const SizedBox(height: 50.0),
+          Text('Artikel Terbaru', style: theme.textTheme.headline5),
+          ListView.builder(
+            itemCount: dummyFeed.length,
+              itemBuilder: (context, index) {
+                return FeedItem(
+                    title: dummyFeed[index].title!,
+                    imageUrl: dummyFeed[index].imageUrl!);
+              }
           )
         ],
       ),
@@ -64,4 +92,6 @@ class GuestDashboardScreen extends StatelessWidget {
     );
   }
 }
+
+
 

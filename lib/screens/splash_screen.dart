@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/user_manager.dart';
 import '../utils/routes.dart';
 import '../utils/constants.dart';
 
@@ -17,16 +18,20 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 2), (){
-      if (_isLoggedIn()) {
-        Navigator.of(context).pushNamed('//'); // TODO
+    _isGuest().then((value) => {
+      if (value != null) {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.guestDashboardScreen, (route) => false)
+      } else if (_isLoggedIn()) {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false)
       } else {
-        Navigator.of(context).pushNamed(Routes.onBoardingScreen);
+        Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false)
       }
     });
   }
 
   bool _isLoggedIn() => FirebaseAuth.instance.currentUser != null;
+
+  Future<bool?> _isGuest() => UserManager.getGuest();
 
   @override
   Widget build(BuildContext context) {

@@ -26,6 +26,7 @@ class _LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -39,69 +40,36 @@ class _LoginView extends StatelessWidget {
         }
 
         if (state.status.isSubmissionSuccess) {
-          // TODO()
+          Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false);
         }
       },
       child: Column(
         children: [
-          const _LoginHeader(),
-          const SizedBox(height: 24,),
-          const _LoginEmailInput(),
-          const SizedBox(height: 16,),
-          const _LoginPasswordInput(),
-          const SizedBox(height: 16,),
-          const _LoginButton(),
-          const SizedBox(height: 10,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Sudah memiliki akun ? '),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, Routes.loginScreen),
-                child: const Text('Daftar'),
-              )
-            ],
-          )
+          const SizedBox(height: 48.0),
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.arrow_back_ios)
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          Image.asset(
+            'assets/images/personal_details.png',
+            width: 64.0,
+            height: 64.0,
+          ),
+          Text('Daftar', style: theme.textTheme.headline5),
+          const SizedBox(height: 32.0),
+          _LoginEmailInput(),
+          const SizedBox(height: 10.0),
+          _LoginPasswordInput(),
+          const SizedBox(height: 120.0),
+          _LoginButton()
         ],
       ),
-    );
-  }
-}
-
-class _LoginHeader extends StatelessWidget {
-  const _LoginHeader({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Column(
-          children: [
-            const SizedBox(height: 32,),
-            Image.asset(
-              'assets/images/login_illustration.png',
-              fit: BoxFit.fill,
-              width: size.width,
-              height: size.height * 0.4,
-            ),
-
-             const SizedBox(height: 96.0)
-          ],
-        ),
-
-        Positioned(
-          bottom: 0,
-          width: size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/logo.png', width: 128, height: 128),
-              Text(Constants.appName, style: Theme.of(context).textTheme.headline4,)
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -177,9 +145,7 @@ class _LoginButton extends StatelessWidget {
           const Center(child: CircularProgressIndicator()) :
           CommonButton(
               title: 'Login',
-              onTap: () {
-                Navigator.pushNamed(context, Routes.guestDashboardScreen);
-              }
+              onTap: () => context.read<LoginCubit>().submit()
           );
         }
       ),

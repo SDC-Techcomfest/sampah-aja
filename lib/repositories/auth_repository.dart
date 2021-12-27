@@ -95,14 +95,18 @@ class AuthRepository {
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
   Future<void> signUp({
+    required String name,
     required String email,
     required String password,
   }) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      User? user = result.user;
+      await user!.updateDisplayName(name);
+      await user.updatePhotoURL('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
     } on FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
