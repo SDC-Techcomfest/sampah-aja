@@ -24,8 +24,8 @@ class OnBoardingItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 64,),
-          Image.asset(assetImage, width: 180, height: 180,),
-          const SizedBox(height: 24,),
+          Image.asset(assetImage, width: 264, height: 345,),
+          const SizedBox(height: 50,),
           Text(
             title,
             style: theme.textTheme.headline5,
@@ -33,7 +33,7 @@ class OnBoardingItem extends StatelessWidget {
           ),
           const SizedBox(height: 16,),
           Text(
-            title,
+            subtitle,
             style: theme.textTheme.bodyText2,
             textAlign: TextAlign.center
           ),

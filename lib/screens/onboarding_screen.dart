@@ -14,14 +14,19 @@ class OnBoardingScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => OnBoardingCubit(),
       child: Scaffold(
-        body: Padding(
+        body: Container(
           padding: const EdgeInsets.all(32.0),
-          child: Column(
-            children: const [
-              _OnBoardingView(),
-              _OnBoardingIndicator(),
-            ],
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: const Alignment(0, 0.6),
+                  colors: [
+                    Color(0xFF499D2F).withOpacity(0.2),
+                    Colors.white
+                  ]
+              )
           ),
+          child: const _OnBoardingView(),
         ),
         bottomNavigationBar: const _OnBoardingBottomBar(),
       ),
@@ -41,20 +46,20 @@ class _OnBoardingView extends StatelessWidget {
           case 0:
             return const OnBoardingItem(
                 assetImage: 'assets/images/onboarding_1.png',
-                title: 'Find hundereds of green brands',
-                subtitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+                title: 'Daur ulang barang',
+                subtitle: 'Gunakan lagi barang sisa yang bisa didaur ulang'
             );
           case 1:
             return const OnBoardingItem(
                 assetImage: 'assets/images/onboarding_2.png',
-                title: 'Find hundereds of green brands',
-                subtitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+                title: 'Berkontribusi kepada lingkungan',
+                subtitle: 'Ikut serta dalam menjaga kebersihan lingkungan sekitar'
             );
           case 2:
             return const OnBoardingItem(
                 assetImage: 'assets/images/onboarding_3.png',
-                title: 'Find hundereds of green brands',
-                subtitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+                title: 'Alam yang asri',
+                subtitle: 'Dengan begitu anda akan merasakan keasrian alam'
             );
           default:
             return Container();
@@ -116,23 +121,32 @@ class _OnBoardingBottomBar extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              snapshot == 0 ? const SizedBox(height: 2,width: 2,) :
-                TextButton(
-                    onPressed: () => context.read<OnBoardingCubit>().decrement(),
-                    child: const Text('Sebelumnya')
+
+                Flexible(
+                  flex: 1,
+                  child: TextButton(
+                      onPressed: () => context.read<OnBoardingCubit>().decrement(),
+                      child: const Text('Lewati', style: TextStyle(color: Colors.grey),)
+                  ),
                 ) ,
 
-              TextButton(
-                  onPressed: () {
-                    if (snapshot == 2) {
-                      Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false);
-                    } else {
-                      context.read<OnBoardingCubit>().increment();
-                    }
-                  },
-                  child: Text(snapshot == 2 ? 'Login' : 'Selanjutnya')
+              const Flexible(
+                flex: 2,
+                  child: _OnBoardingIndicator()
+              ),
+
+              Flexible(
+                child: TextButton(
+                    onPressed: () {
+                      if (snapshot == 2) {
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false);
+                      } else {
+                        context.read<OnBoardingCubit>().increment();
+                      }
+                    },
+                    child: Text(snapshot == 2 ? 'Selesai' : 'Lanjut')
+                ),
               )
             ],
           ),

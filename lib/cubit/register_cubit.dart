@@ -11,7 +11,6 @@ class RegisterState extends Equatable {
 
   const RegisterState({
     this.firstName = const Default.pure(),
-    this.lastName = const Default.pure(),
     this.email = const Email.pure(),
     this.password = const Password.pure(),
     this.confirmedPassword = const ConfirmedPassword.pure(),
@@ -20,7 +19,6 @@ class RegisterState extends Equatable {
   });
 
   final Default firstName;
-  final Default lastName;
   final Email email;
   final Password password;
   final ConfirmedPassword confirmedPassword;
@@ -28,11 +26,10 @@ class RegisterState extends Equatable {
   final String? errorMessage;
 
   @override
-  List<Object> get props => [firstName, lastName, email, password, confirmedPassword, status];
+  List<Object> get props => [firstName, email, password, confirmedPassword, status];
 
   RegisterState copyWith({
     Default? firstName,
-    Default? lastName,
     Email? email,
     Password? password,
     ConfirmedPassword? confirmedPassword,
@@ -41,7 +38,6 @@ class RegisterState extends Equatable {
   }) {
     return RegisterState(
       firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       password: password ?? this.password,
       confirmedPassword: confirmedPassword ?? this.confirmedPassword,
@@ -62,21 +58,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       firstName: firstName,
       status: Formz.validate([
         firstName,
-        state.lastName,
-        state.email,
-        state.password,
-        state.confirmedPassword
-      ]),
-    ));
-  }
-
-  void lastNameChanged(String value) {
-    final lastName = Default.dirty(value);
-    emit(state.copyWith(
-      lastName: lastName,
-      status: Formz.validate([
-        state.firstName,
-        lastName,
         state.email,
         state.password,
         state.confirmedPassword
@@ -90,7 +71,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       email: email,
       status: Formz.validate([
         state.firstName,
-        state.lastName,
         email,
         state.password,
         state.confirmedPassword
@@ -109,7 +89,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       confirmedPassword: confirmedPassword,
       status: Formz.validate([
         state.firstName,
-        state.lastName,
         state.email,
         password,
         confirmedPassword,
@@ -126,7 +105,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       confirmedPassword: confirmedPassword,
       status: Formz.validate([
         state.firstName,
-        state.lastName,
         state.email,
         state.password,
         confirmedPassword,
@@ -139,7 +117,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await _authRepository.signUp(
-          name: "${state.firstName.value} ${state.lastName.value}",
+          name: state.firstName.value!,
           email: state.email.value,
           password: state.password.value
       );

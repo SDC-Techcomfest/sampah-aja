@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/user_manager.dart';
 import '../utils/routes.dart';
 import '../utils/constants.dart';
 
@@ -14,46 +13,62 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  final _firebaseAuth = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
 
-    _isGuest().then((value) => {
-      if (value != null) {
-        Navigator.pushNamedAndRemoveUntil(context, Routes.guestDashboardScreen, (route) => false)
-      } else if (_isLoggedIn()) {
-        Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false)
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_firebaseAuth != null) {
+        if (_firebaseAuth!.isAnonymous) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.guestDashboardScreen, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false);
+        }
       } else {
-        Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false)
+        Navigator.pushNamedAndRemoveUntil(context, Routes.onBoardingScreen, (route) => false);
       }
     });
   }
 
-  bool _isLoggedIn() => FirebaseAuth.instance.currentUser != null;
-
-  Future<bool?> _isGuest() => UserManager.getGuest();
-
   @override
   Widget build(BuildContext context) {
-    //final theme = Theme.of(context);
+
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-              bottom: 0,
-              child: Image.asset('assets/images/splash_background.png')
-          ),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset('assets/images/logo.png'),
-                const SizedBox(height: 10.0,),
-                const Text(Constants.appName, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),)
-              ],
-            ),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: const Alignment(0, 0.6),
+            colors: [
+              Color(0xFF499D2F).withOpacity(0.2),
+              Colors.white
+            ]
           )
-        ],
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+                bottom: 0,
+                child: Image.asset('assets/images/splash_background.png')
+            ),
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset('assets/images/logo.png', width: 128.0, height: 128.0,),
+                  const SizedBox(height: 10.0,),
+                  Text(Constants.appName, style: Theme.of(context).textTheme.headline4,),
+                  const SizedBox(height: 90.0,),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

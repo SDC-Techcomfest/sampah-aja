@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../utils/app_theme.dart';
+import '../components/auth_card.dart';
+import '../components/commons/appbar.dart';
 import '../cubit/login_cubit.dart';
 import '../components/commons/button.dart';
 import '../utils/routes.dart';
-import '../utils/constants.dart';
 import '../utils/formz.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -27,6 +29,7 @@ class _LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -43,32 +46,73 @@ class _LoginView extends StatelessWidget {
           Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false);
         }
       },
-      child: Column(
-        children: [
-          const SizedBox(height: 48.0),
-          Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.arrow_back_ios)
-            ),
+      child: Container(
+        height: size.height,
+        padding: const EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: const Alignment(0, 0.6),
+                colors: [
+                  Color(0xFF499D2F).withOpacity(0.2),
+                  Colors.white
+                ]
+            )
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TransparentAppbar(
+                  child: Container()
+              ),
+              const SizedBox(height: 20,),
+              AuthCard(
+                  child: Column(
+                    children: [
+                      Text("Let's Sign You In", style: theme.textTheme.headline5),
+                      const SizedBox(height: 8),
+                      Text("Welcome back, you’ve", style: theme.textTheme.bodyText2),
+                      const SizedBox(height: 24),
+                      _LoginEmailInput(),
+                      const SizedBox(height: 16),
+                      _LoginPasswordInput(),
+                      const SizedBox(height: 24),
+                      _LoginButton(),
+                      const SizedBox(height: 16),
+                      SecondaryButton(
+                          onTap: () {
+                            context.read<LoginCubit>().loginAsGuest().then((value) => {
+                              Navigator.pushNamedAndRemoveUntil(context, Routes.guestDashboardScreen, (route) => false)
+                            });
+                          },
+                          child: Text(
+                            'Masuk sebagai tamu',
+                            style: theme.textTheme.button!.copyWith(
+                              color: AppTheme.colorPrimary
+                            )
+                          )
+                      )
+                    ],
+                  )
+              ),
+              const SizedBox(height: 56),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Dont’s have an account ? ', style: theme.textTheme.bodyText2),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, Routes.registerScreen),
+                    child: Text('Signup', style: theme.textTheme.bodyText2!.copyWith(
+                        color: AppTheme.colorPrimary
+                    )),
+                  )
+                ],
+              )
+
+            ],
           ),
-          const SizedBox(height: 16.0),
-          Image.asset(
-            'assets/images/personal_details.png',
-            width: 64.0,
-            height: 64.0,
-          ),
-          Text('Daftar', style: theme.textTheme.headline5),
-          const SizedBox(height: 32.0),
-          _LoginEmailInput(),
-          const SizedBox(height: 10.0),
-          _LoginPasswordInput(),
-          const SizedBox(height: 120.0),
-          _LoginButton()
-        ],
+        ),
       ),
     );
   }
@@ -79,24 +123,20 @@ class _LoginEmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: BlocBuilder<LoginCubit, LoginState>(
-          buildWhen: (previous, current) => previous.email != current.email,
-        builder: (context, state) {
-          return TextField(
-            onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18.0)
-              ),
-              hintText: 'Email',
-              errorText: state.email.invalid ? 'invalid email' : null,
-            ),
-            keyboardType: TextInputType.emailAddress,
-          );
-        }
-      ),
+    return BlocBuilder<LoginCubit, LoginState>(
+        buildWhen: (previous, current) => previous.email != current.email,
+      builder: (context, state) {
+        return TextField(
+          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+            enabledBorder: AppTheme.outlineInputBorder(),
+            labelText: 'Email',
+            errorText: state.email.invalid ? 'invalid email' : null,
+          ),
+          keyboardType: TextInputType.emailAddress,
+        );
+      }
     );
   }
 }
@@ -106,26 +146,22 @@ class _LoginPasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: BlocBuilder<LoginCubit, LoginState>(
-          buildWhen: (previous, current) => previous.password != current.password,
-        builder: (context, state) {
-          return TextField(
-          onChanged: (password) =>
-          context.read<LoginCubit>().passwordChanged(password),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18.0)
-              ),
-              hintText: 'Password',
-              errorText: state.password.invalid ? 'invalid password' : null,
-            ),
-            obscureText: true,
-            keyboardType: TextInputType.emailAddress,
-          );
-        }
-      ),
+    return BlocBuilder<LoginCubit, LoginState>(
+        buildWhen: (previous, current) => previous.password != current.password,
+      builder: (context, state) {
+        return TextField(
+        onChanged: (password) =>
+        context.read<LoginCubit>().passwordChanged(password),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+            enabledBorder: AppTheme.outlineInputBorder(),
+            labelText: 'Password',
+            errorText: state.password.invalid ? 'invalid password' : null,
+          ),
+          obscureText: true,
+          keyboardType: TextInputType.emailAddress,
+        );
+      }
     );
   }
 }
@@ -137,18 +173,15 @@ class _LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: BlocBuilder<LoginCubit, LoginState>(
-        builder: (context, snapshot) {
-          return snapshot.status.isSubmissionInProgress ?
-          const Center(child: CircularProgressIndicator()) :
-          CommonButton(
-              title: 'Login',
-              onTap: () => context.read<LoginCubit>().submit()
-          );
-        }
-      ),
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, snapshot) {
+        return snapshot.status.isSubmissionInProgress ?
+        const Center(child: CircularProgressIndicator()) :
+        CommonButton(
+            title: 'Masuk',
+            onTap: () => context.read<LoginCubit>().submit()
+        );
+      }
     );
   }
 }

@@ -1,97 +1,137 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../models/feed_model.dart';
+import '../components/commons/dialog.dart';
+import '../utils/routes.dart';
+import '../cubit/guest_dashboard_cubit.dart';
+import '../components/commons/appbar.dart';
+import '../components/discover_item.dart';
 import '../components/feed_item.dart';
-import '../utils/app_theme.dart';
-
-final dummyFeed = [
-  FeedModel(
-      title: 'Timbunan sampah meningkat di daerah Surabaya!',
-      imageUrl: 'https://akcdn.detik.net.id/community/media/visual/2021/06/24/tumpukan-sampah-berserakan-di-labuhanbatu-1.jpeg'
-  )
-];
+import '../utils/formz.dart';
 
 class GuestDashboardScreen extends StatelessWidget {
   const GuestDashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
-    return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Column(
-                children: [
-                  Image.asset('assets/images/guest_dashboard.png', height: 256.0),
-                  const SizedBox(height: 50,)
-                ],
-              ),
-              Positioned(
-                bottom: 0,
-                  width: size.width - 50,
-                  height: 100,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(child: _guestMenu(icon: Icons.history, title: 'History', onTap: (){})),
-                        Expanded(child: _guestMenu(icon: Icons.history, title: 'History', onTap: (){})),
-                        Expanded(child: _guestMenu(icon: Icons.history, title: 'History', onTap: (){})),
-                      ],
-                    ),
-                  )
-              )
-            ],
-          ),
-          ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Image.asset('assets/images/banner_dashboard.ong', width: 327, height: 131),
-              const SizedBox(width: 16.0),
-              Image.asset('assets/images/banner_dashboard.ong', width: 327, height: 131)
-            ],
-          ),
-          const SizedBox(height: 50.0),
-          Text('Artikel Terbaru', style: theme.textTheme.headline5),
-          ListView.builder(
-            itemCount: dummyFeed.length,
-              itemBuilder: (context, index) {
-                return FeedItem(
-                    title: dummyFeed[index].title!,
-                    imageUrl: dummyFeed[index].imageUrl!);
-              }
-          )
-        ],
+    return BlocProvider(
+      create: (_) => GuestDashboardCubit(),
+      child: const Scaffold(
+        backgroundColor: Colors.white,
+        body: _GuestDashboardView(),
       ),
     );
   }
+}
 
-  Widget _guestMenu({required IconData icon, required String title, required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppTheme.colorSecondary,
-          borderRadius: BorderRadius.circular(10)
-        ),
+class _GuestDashboardView extends StatelessWidget {
+  const _GuestDashboardView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocListener<GuestDashboardCubit, GuestDashboardState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.splashScreen, (route) => false);
+        }
+      },
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppTheme.colorPrimary),
-            Text(title, textAlign: TextAlign.center,)
+            const GradientAppbar(
+                child: Text('Selamat Datang')
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Text(
+                'Discover',
+                style: theme.textTheme.headline6,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DiscoverItem(
+                      title: 'Scanner',
+                      icon: Icons.qr_code,
+                      onTap: (){}
+                  ),
+
+                  DiscoverItem(
+                      title: 'Toko',
+                      icon: Icons.storefront_sharp,
+                      onTap: (){}
+                  ),
+
+                  DiscoverItem(
+                      title: 'Keluar',
+                      icon: Icons.logout,
+                      onTap: () {
+                        showDialog(context: context, builder: (ctx) {
+                          return ConfirmationDialog(
+                            title: 'Apakah anda yakin ?',
+                            content: 'Jika anda keluar maka informasi anda akan hilang',
+                            onYes: () => context.read<GuestDashboardCubit>().logout(),
+                          );
+                        });
+                      }
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Text(
+                'Feed',
+                style: theme.textTheme.headline6,
+              ),
+            ),
+
+            const _GuestDashboardFeed()
           ],
         ),
       ),
     );
   }
 }
+
+class _GuestDashboardFeed extends StatelessWidget {
+  const _GuestDashboardFeed({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GuestDashboardCubit, GuestDashboardState>(
+        builder: (context, state) {
+          if (state.listFeed != null) {
+            return ListView.builder(
+                itemCount: state.listFeed!.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.feedDetailScreen);
+                    },
+                    child: FeedItem(
+                        title: state.listFeed![index].title!,
+                        description: state.listFeed![index].description!,
+                        imageUrl: state.listFeed![index].imageUrl!,
+                    ),
+                  );
+                });
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        }
+    );
+  }
+}
+
+
 
 
 

@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../components/auth_card.dart';
+import '../components/commons/appbar.dart';
+import '../utils/app_theme.dart';
+import '../utils/routes.dart';
+import '../cubit/register_cubit.dart';
 import '../components/commons/button.dart';
+import '../utils/formz.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _RegisterView(),
+    return BlocProvider(
+      create: (_) => RegisterCubit(),
+      child: const Scaffold(
+        body: _RegisterView(),
+      ),
     );
   }
 }
@@ -19,40 +29,87 @@ class _RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 48.0),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.arrow_back_ios)
-            ),
+    final size = MediaQuery.of(context).size;
+    return BlocListener<RegisterCubit, RegisterState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Authentication Failure'),
+              ),
+            );
+        }
+
+        if (state.status.isSubmissionSuccess) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false);
+        }
+      },
+      child: Container(
+        width: size.width,
+        height: size.height,
+        padding: const EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: const Alignment(0, 0.6),
+                colors: [
+                  Color(0xFF499D2F).withOpacity(0.2),
+                  Colors.white
+                ]
+            )
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TransparentAppbar(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: AppBarButton(
+                        onTap: () => Navigator.pop(context),
+                        icon: Icons.arrow_back_ios
+                    ),
+                  )
+              ),
+              const SizedBox(height: 20,),
+              AuthCard(
+                  child: Column(
+                    children: [
+                      Text("Memulai", style: theme.textTheme.headline5),
+                      const SizedBox(height: 8),
+                      Text("Daftar akun untuk melanjutkan", style: theme.textTheme.bodyText2),
+                      const SizedBox(height: 24),
+                      _RegisterFirstNameInput(),
+                      const SizedBox(height: 16),
+                      _RegisterEmailInput(),
+                      const SizedBox(height: 16),
+                      _RegisterPasswordInput(),
+                      const SizedBox(height: 16),
+                      _RegisterConfirmPasswordInput(),
+                      const SizedBox(height: 24),
+                      _RegisterButton(),
+                    ],
+                  )
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Already have an account ? ', style: theme.textTheme.bodyText2, textAlign: TextAlign.center,),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text('Sign in', style: theme.textTheme.bodyText2!.copyWith(
+                        color: AppTheme.colorPrimary
+                    )),
+                  )
+                ],
+              )
+            ],
           ),
-          const SizedBox(height: 16.0),
-          Image.asset(
-            'assets/images/personal_details.png',
-            width: 64.0,
-            height: 64.0,
-          ),
-          Text('Daftar', style: theme.textTheme.headline5),
-          const SizedBox(height: 32.0),
-          _RegisterFirstNameInput(),
-          const SizedBox(height: 10.0),
-          _RegisterLastNameInput(),
-          const SizedBox(height: 10.0),
-          _RegisterEmailInput(),
-          const SizedBox(height: 10.0),
-          _RegisterPasswordInput(),
-          const SizedBox(height: 10.0),
-          _RegisterConfirmPasswordInput(),
-          const SizedBox(height: 120.0),
-          _RegisterButton()
-        ],
+        ),
       ),
     );
   }
@@ -63,33 +120,20 @@ class _RegisterFirstNameInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String value) {},
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0)
-        ),
-        hintText: 'Nama depan',
-      ),
-      keyboardType: TextInputType.name,
-    );
-  }
-}
-
-class _RegisterLastNameInput extends StatelessWidget {
-  const _RegisterLastNameInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String value) {},
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0)
-        ),
-        hintText: 'Nama belakang',
-      ),
-      keyboardType: TextInputType.name,
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (String value) =>
+              context.read<RegisterCubit>().firstNameChanged(value),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+              enabledBorder: AppTheme.outlineInputBorder(),
+            labelText: 'Nama',
+            errorText: state.firstName.invalid ? 'invalid text': null
+          ),
+          keyboardType: TextInputType.name,
+        );
+      }
     );
   }
 }
@@ -99,15 +143,19 @@ class _RegisterEmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String value) {},
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0)
-        ),
-        hintText: 'Email',
-      ),
-      keyboardType: TextInputType.emailAddress,
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (String value) => context.read<RegisterCubit>().emailChanged(value),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+              enabledBorder: AppTheme.outlineInputBorder(),
+              labelText: 'Email',
+              errorText: state.email.invalid ? 'invalid email': null
+          ),
+          keyboardType: TextInputType.emailAddress,
+        );
+      }
     );
   }
 }
@@ -117,15 +165,19 @@ class _RegisterPasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String value) {},
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0)
-        ),
-        hintText: 'Password',
-      ),
-      obscureText: true,
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (String value) => context.read<RegisterCubit>().passwordChanged(value),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+              enabledBorder: AppTheme.outlineInputBorder(),
+              labelText: 'Password',
+              errorText: state.password.invalid ? 'invalid password': null
+          ),
+          obscureText: true,
+        );
+      }
     );
   }
 }
@@ -135,15 +187,19 @@ class _RegisterConfirmPasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String value) {},
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0)
-        ),
-        hintText: 'Email',
-      ),
-      obscureText: true,
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (String value) => context.read<RegisterCubit>().confirmedPasswordChanged(value),
+          decoration: InputDecoration(
+            border: AppTheme.outlineInputBorder(),
+              enabledBorder: AppTheme.outlineInputBorder(),
+            labelText: 'Konfirmasi password',
+              errorText: state.confirmedPassword.invalid ? 'password no match': null
+          ),
+          obscureText: true,
+        );
+      }
     );
   }
 }
@@ -153,9 +209,14 @@ class _RegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonButton(
-        title: 'Daftar',
-        onTap: () {}
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress ? const CircularProgressIndicator()
+            : CommonButton(
+            title: 'Daftar',
+            onTap: () => context.read<RegisterCubit>().submit()
+        );
+      }
     );
   }
 }

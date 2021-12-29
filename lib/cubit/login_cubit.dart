@@ -76,4 +76,12 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
+
+  Future<void> loginAsGuest() async {
+    try {
+      await _authRepository.signInAsGuest();
+    } catch(_) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
 }

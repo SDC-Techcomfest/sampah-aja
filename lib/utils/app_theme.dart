@@ -4,18 +4,32 @@ class AppTheme {
   static ThemeData theme() {
     return ThemeData(
       primaryColor: colorPrimary,
-      fontFamily: 'Manrope',
+      fontFamily: 'SFPro',
       textTheme: const TextTheme(
-        headline4: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        headline5: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-        bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        headline4: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+        headline5: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+        headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        bodyText1: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+        bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF091B3D)),
         caption: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
         button: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(primary: colorPrimary)
-      )
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+        )
+      ),
+    );
+  }
+
+  static OutlineInputBorder outlineInputBorder() {
+    return OutlineInputBorder(
+      borderSide: const BorderSide(
+          color: Color(0xFFE7E8EC)
+      ),
+      borderRadius: BorderRadius.circular(18.0),
     );
   }
 

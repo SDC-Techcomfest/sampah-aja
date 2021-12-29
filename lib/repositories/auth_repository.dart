@@ -80,6 +80,9 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 }
 
 /// Thrown during the logout process if a failure occurs.
+class SignAnonymousFailure implements Exception {}
+
+/// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
 /// {@template authentication_repository}
@@ -134,6 +137,16 @@ class AuthRepository {
       throw const LogInWithEmailAndPasswordFailure();
     }
 
+  }
+
+  /// Sign as guest no email and password required
+  ///
+  Future<void> signInAsGuest() async {
+    try {
+      await _firebaseAuth.signInAnonymously();
+    } catch (_) {
+      throw SignAnonymousFailure();
+    }
   }
 
   /// Signs out the current user which will emit
