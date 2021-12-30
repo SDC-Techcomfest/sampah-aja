@@ -10,6 +10,8 @@ class Routes {
   static const String guestDashboardScreen = "/guest/dashboard";
   static const String userDashboardScreen = "/user/dashboard";
   static const String feedDetailScreen = "/feed/detail";
+  static const String scannerScreen = "/scanner";
+  static const String fertilizerStoreScreen = "/fertilizer";
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch(settings.name) {
@@ -26,7 +28,12 @@ class Routes {
       case userDashboardScreen:
         return MaterialPageRoute(builder: (_) => const UserDashboardScreen());
       case feedDetailScreen:
-        return MaterialPageRoute(builder: (_) => const FeedDetailScreen());
+        final args = settings.arguments as ScreenArguments<String>;
+        return MaterialPageRoute(builder: (_) => FeedDetailScreen(id: args.data));
+      case fertilizerStoreScreen:
+        return MaterialPageRoute(builder: (_) => const FertilizerStoreScreen());
+      case scannerScreen:
+        return MaterialPageRoute(builder: (_) => const ScannerScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
@@ -35,4 +42,10 @@ class Routes {
             ));
     }
   }
+}
+
+class ScreenArguments<T> {
+  final T data;
+
+  ScreenArguments(this.data);
 }

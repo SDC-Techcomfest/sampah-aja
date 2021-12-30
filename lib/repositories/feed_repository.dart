@@ -19,4 +19,10 @@ class FeedRepository {
 
     return listFeed;
   }
+
+  Future<FeedModel> getFeedById(String id) async {
+    final result = await _firebaseFirestore.collection('feed').doc(id).get();
+
+    return FeedModel.fromJson(result.data()!, id);
+  }
 }

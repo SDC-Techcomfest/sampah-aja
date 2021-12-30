@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:sampah_aja/components/commons/appbar.dart';
-import 'package:sampah_aja/components/discover_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../components/commons/dialog.dart';
+import '../utils/routes.dart';
+import '../utils/formz.dart';
+import '../cubit/user_dashboard_cubit.dart';
+import '../components/commons/appbar.dart';
+import '../components/discover_item.dart';
 import '../components/feed_item.dart';
 
 class UserDashboardScreen extends StatelessWidget {
@@ -10,14 +14,34 @@ class UserDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    return BlocProvider(
+      create: (_) => UserDashboardCubit(),
+      child: const Scaffold(
+        backgroundColor: Colors.white,
+        body: _UserDashboardScreen(),
+      ),
+    );
+  }
+}
+
+class _UserDashboardScreen extends StatelessWidget {
+  const _UserDashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final theme  = Theme.of(context);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+    return BlocListener<UserDashboardCubit, UserDashboardState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.splashScreen, (route) => false);
+        }
+      },
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GradientAppbar(
+            const GradientAppbar(
                 child: Text('Selamat Datang')
             ),
             Padding(
@@ -47,7 +71,15 @@ class UserDashboardScreen extends StatelessWidget {
                   DiscoverItem(
                       title: 'Keluar',
                       icon: Icons.logout,
-                      onTap: (){}
+                      onTap: () {
+                        showDialog(context: context, builder: (ctx) {
+                          return ConfirmationDialog(
+                            title: 'Apakah anda yakin ?',
+                            content: 'Jika anda keluar maka informasi anda akan hilang',
+                            onYes: () => context.read<UserDashboardCubit>().logout(),
+                          );
+                        });
+                      }
                   ),
                 ],
               ),
@@ -61,18 +93,49 @@ class UserDashboardScreen extends StatelessWidget {
               ),
             ),
 
-            ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return  const FeedItem(
-                      title: 'Jangan Buang Sampah Sembarangan Kalau Tidak Mau Kena Penyakit Ini!',
-                      description: 'Kebiasaan buang sampah sembarangan bukan hanya bisa membahayakan kesehatan lingkungan seperti adanya bahaya banjir',
-                      imageUrl: 'https://cdn.hellosehat.com/wp-content/uploads/2018/11/Jangan-Buang-Sampah-Sembarangan-Kalau-Tidak-Mau-Kena-Penyakit-Ini.jpg');
-                })
+            const _UserDashboardFeed()
           ],
         ),
       ),
     );
   }
 }
+
+class _UserDashboardFeed extends StatelessWidget {
+  const _UserDashboardFeed({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserDashboardCubit, UserDashboardState>(
+        builder: (context, state) {
+          if (state.listFeed != null) {
+            return ListView.builder(
+                itemCount: state.listFeed!.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context,
+                          Routes.feedDetailScreen,
+                          arguments: ScreenArguments<String>(state.listFeed![index].id!)
+                      );
+                    },
+                    child: FeedItem(
+                      title: state.listFeed![index].title!,
+                      description: state.listFeed![index].description!,
+                      imageUrl: state.listFeed![index].imageUrl!,
+                    ),
+                  );
+                });
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        }
+    );
+  }
+}
+
+
+
+

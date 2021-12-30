@@ -6,12 +6,12 @@ import '../repositories/feed_repository.dart';
 import '../utils/formz.dart';
 import '../repositories/auth_repository.dart';
 
-class GuestDashboardState extends Equatable {
+class UserDashboardState extends Equatable {
 
   final List<FeedModel>? listFeed;
   final FormzStatus status;
 
-  const GuestDashboardState({
+  const UserDashboardState({
     this.listFeed,
     this.status = FormzStatus.pure
   });
@@ -19,19 +19,19 @@ class GuestDashboardState extends Equatable {
   @override
   List<Object?> get props => [listFeed, status];
 
-  GuestDashboardState copyWith({
+  UserDashboardState copyWith({
     List<FeedModel>? listFeed,
     FormzStatus? status
   }) {
-    return GuestDashboardState(
-      listFeed: listFeed ?? this.listFeed,
+    return UserDashboardState(
+        listFeed: listFeed ?? this.listFeed,
         status: status ?? this.status
     );
   }
 }
 
-class GuestDashboardCubit extends Cubit<GuestDashboardState> {
-  GuestDashboardCubit() : super(const GuestDashboardState()) {
+class UserDashboardCubit extends Cubit<UserDashboardState> {
+  UserDashboardCubit() : super(const UserDashboardState()) {
     getAllFeed();
   }
 

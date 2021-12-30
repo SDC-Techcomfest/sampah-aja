@@ -58,13 +58,13 @@ class _GuestDashboardView extends StatelessWidget {
                   DiscoverItem(
                       title: 'Scanner',
                       icon: Icons.qr_code,
-                      onTap: (){}
+                      onTap: () => Navigator.pushNamed(context, Routes.scannerScreen)
                   ),
 
                   DiscoverItem(
                       title: 'Toko',
                       icon: Icons.storefront_sharp,
-                      onTap: (){}
+                      onTap: () => Navigator.pushNamed(context, Routes.fertilizerStoreScreen)
                   ),
 
                   DiscoverItem(
@@ -114,7 +114,11 @@ class _GuestDashboardFeed extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.feedDetailScreen);
+                      Navigator.pushNamed(
+                          context,
+                          Routes.feedDetailScreen,
+                        arguments: ScreenArguments<String>(state.listFeed![index].id!)
+                      );
                     },
                     child: FeedItem(
                         title: state.listFeed![index].title!,
