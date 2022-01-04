@@ -6,20 +6,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/fertilizer_store_model.dart';
 import '../repositories/fertilizer_store_repository.dart';
 
-enum BottomSheetStatus {show, hide}
-
 class FertilizerStoreState extends Equatable {
 
   final List<FertilizerStoreModel>? fertilizerStore;
   final List<Marker>? markers;
   final Position? position;
-  final BottomSheetStatus bottomSheetStatus;
 
   const FertilizerStoreState({
     this.fertilizerStore,
     this.markers,
     this.position,
-    this.bottomSheetStatus = BottomSheetStatus.hide
   });
 
   @override

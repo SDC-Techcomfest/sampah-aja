@@ -41,8 +41,18 @@ class _UserDashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const GradientAppbar(
-                child: Text('Selamat Datang')
+            GradientAppbar(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset('assets/images/logo3.png', width: 38, height: 36),
+                      const SizedBox(width: 18),
+                      Text('Sampah Aja', style: theme.textTheme.headline6)
+                    ],
+                  ),
+                )
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -59,13 +69,13 @@ class _UserDashboardScreen extends StatelessWidget {
                   DiscoverItem(
                       title: 'Profile',
                       icon: Icons.person,
-                      onTap: (){}
+                      onTap: () => Navigator.pushNamed(context, Routes.userProfileScreen)
                   ),
 
                   DiscoverItem(
                       title: 'Notification',
                       icon: Icons.notifications,
-                      onTap: (){}
+                      onTap: () => Navigator.pushNamed(context, Routes.userNotificationScreen)
                   ),
 
                   DiscoverItem(

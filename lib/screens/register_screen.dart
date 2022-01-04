@@ -43,7 +43,7 @@ class _RegisterView extends StatelessWidget {
         }
 
         if (state.status.isSubmissionSuccess) {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.userDashboardScreen, (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, Routes.completeProfileScreen, (route) => false);
         }
       },
       child: Container(
@@ -55,7 +55,7 @@ class _RegisterView extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: const Alignment(0, 0.6),
                 colors: [
-                  Color(0xFF499D2F).withOpacity(0.2),
+                  const Color(0xFF499D2F).withOpacity(0.2),
                   Colors.white
                 ]
             )
@@ -69,7 +69,7 @@ class _RegisterView extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: AppBarButton(
                         onTap: () => Navigator.pop(context),
-                        icon: Icons.arrow_back_ios
+                        icon: Icons.arrow_back
                     ),
                   )
               ),
@@ -81,8 +81,6 @@ class _RegisterView extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text("Daftar akun untuk melanjutkan", style: theme.textTheme.bodyText2),
                       const SizedBox(height: 24),
-                      _RegisterFirstNameInput(),
-                      const SizedBox(height: 16),
                       _RegisterEmailInput(),
                       const SizedBox(height: 16),
                       _RegisterPasswordInput(),
@@ -111,29 +109,6 @@ class _RegisterView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _RegisterFirstNameInput extends StatelessWidget {
-  const _RegisterFirstNameInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<RegisterCubit, RegisterState>(
-      builder: (context, state) {
-        return TextField(
-          onChanged: (String value) =>
-              context.read<RegisterCubit>().firstNameChanged(value),
-          decoration: InputDecoration(
-            border: AppTheme.outlineInputBorder(),
-              enabledBorder: AppTheme.outlineInputBorder(),
-            labelText: 'Nama',
-            errorText: state.firstName.invalid ? 'invalid text': null
-          ),
-          keyboardType: TextInputType.name,
-        );
-      }
     );
   }
 }

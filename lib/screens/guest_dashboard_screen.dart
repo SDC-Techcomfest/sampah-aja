@@ -40,8 +40,18 @@ class _GuestDashboardView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const GradientAppbar(
-                child: Text('Selamat Datang')
+            GradientAppbar(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset('assets/images/logo3.png', width: 38, height: 36),
+                      const SizedBox(width: 18),
+                      Text('Sampah Aja', style: theme.textTheme.headline6)
+                    ],
+                  ),
+                )
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),

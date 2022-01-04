@@ -5,6 +5,7 @@ class AppTheme {
     return ThemeData(
       primaryColor: colorPrimary,
       fontFamily: 'SFPro',
+      backgroundColor: Colors.white,
       textTheme: const TextTheme(
         headline4: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
         headline5: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -21,6 +22,11 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
         )
       ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87
+      ),
+
     );
   }
 

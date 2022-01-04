@@ -16,12 +16,12 @@ class OnBoardingScreen extends StatelessWidget {
       child: Scaffold(
         body: Container(
           padding: const EdgeInsets.all(32.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
-                  end: const Alignment(0, 0.6),
+                  end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFF499D2F).withOpacity(0.2),
+                    Color(0xFFDDEDD8),
                     Colors.white
                   ]
               )
@@ -121,10 +121,10 @@ class _OnBoardingBottomBar extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
                 Flexible(
-                  flex: 1,
+
                   child: TextButton(
                       onPressed: () => context.read<OnBoardingCubit>().decrement(),
                       child: const Text('Lewati', style: TextStyle(color: Colors.grey),)
@@ -132,11 +132,12 @@ class _OnBoardingBottomBar extends StatelessWidget {
                 ) ,
 
               const Flexible(
-                flex: 2,
+
                   child: _OnBoardingIndicator()
               ),
 
               Flexible(
+
                 child: TextButton(
                     onPressed: () {
                       if (snapshot == 2) {

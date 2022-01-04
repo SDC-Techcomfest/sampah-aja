@@ -82,9 +82,7 @@ class _LoginView extends StatelessWidget {
                       const SizedBox(height: 16),
                       SecondaryButton(
                           onTap: () {
-                            context.read<LoginCubit>().loginAsGuest().then((value) => {
-                              Navigator.pushNamedAndRemoveUntil(context, Routes.guestDashboardScreen, (route) => false)
-                            });
+                            Navigator.pushNamed(context, Routes.loginGuestScreen);
                           },
                           child: Text(
                             'Masuk sebagai tamu',

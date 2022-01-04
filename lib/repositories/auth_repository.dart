@@ -98,7 +98,6 @@ class AuthRepository {
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
   Future<void> signUp({
-    required String name,
     required String email,
     required String password,
   }) async {
@@ -108,8 +107,8 @@ class AuthRepository {
         password: password,
       );
       User? user = result.user;
-      await user!.updateDisplayName(name);
-      await user.updatePhotoURL('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+      await user!.updateDisplayName('');
+      await user.updatePhotoURL('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png');
     } on FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -141,9 +140,10 @@ class AuthRepository {
 
   /// Sign as guest no email and password required
   ///
-  Future<void> signInAsGuest() async {
+  Future<User?> signInAsGuest() async {
     try {
-      await _firebaseAuth.signInAnonymously();
+      final user = await _firebaseAuth.signInAnonymously();
+      return user.user;
     } catch (_) {
       throw SignAnonymousFailure();
     }
@@ -159,5 +159,10 @@ class AuthRepository {
     } on Exception {
       throw LogOutFailure();
     }
+  }
+
+  User? getUser() {
+    final user = _firebaseAuth.currentUser;
+    return user;
   }
 }

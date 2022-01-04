@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../repositories/user_repository.dart';
 import '../models/feed_model.dart';
 import '../repositories/feed_repository.dart';
 import '../utils/formz.dart';
@@ -36,11 +37,14 @@ class GuestDashboardCubit extends Cubit<GuestDashboardState> {
   }
 
   final _authRepository = AuthRepository();
+  final _userRepository = UserRepository();
   final _feedRepository = FeedRepository();
 
   Future<void> logout() async {
     try {
+      final user = _authRepository.getUser();
       await _authRepository.logOut();
+      await _userRepository.deleteGuest(user!.uid);
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       throw LogOutFailure();

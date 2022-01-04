@@ -10,19 +10,20 @@ class GradientAppbar extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      height: 174,
+      height: 154,
       child: Column(
         children: [
-          const SizedBox(height: 48,),
+          const SizedBox(height: 56,),
           child
         ],
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topCenter,
-              end: const Alignment(0, 0.6),
+              end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF499D2F).withOpacity(0.2),
+                Color(0xFFDDEDD9),
+                Color(0xFFDDEDD9),
                 Colors.white
               ]
           )
