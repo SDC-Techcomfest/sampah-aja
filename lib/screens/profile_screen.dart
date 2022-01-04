@@ -141,46 +141,53 @@ class _ProfileView extends StatelessWidget {
                       textAlign: TextAlign.start,
                     ),
                   ),
-                  const SizedBox(height: 12.0),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Email',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black
-                        ),
+                  const SizedBox(height: 18.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Email',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black
                       ),
-                      Text(
-                        state.authUser!.email!,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12.0),
-                  Text(
-                    'Alamat',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black
                     ),
                   ),
                   const SizedBox(height: 8.0),
-                  Text(
-                    state.userModel!.address!,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black
-                    ),),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      state.authUser!.email!,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Alamat',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      state.userModel!.address!,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black
+                      ),),
+                  ),
                 ],
               ),
             );

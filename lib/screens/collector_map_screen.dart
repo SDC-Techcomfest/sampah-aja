@@ -11,12 +11,13 @@ import '../utils/formz.dart';
 
 class CollectorMapScreen extends StatelessWidget {
   final bool garbageCollector;
-  const CollectorMapScreen({Key? key, required this.garbageCollector}) : super(key: key);
+  final int garbageSize;
+  const CollectorMapScreen({Key? key, required this.garbageCollector, required this.garbageSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CollectorMapCubit(garbageCollector),
+      create: (_) => CollectorMapCubit(garbageCollector, garbageSize),
       child: Scaffold(
         body: Stack(
           children: [

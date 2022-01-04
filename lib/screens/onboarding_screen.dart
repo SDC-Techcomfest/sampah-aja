@@ -126,7 +126,7 @@ class _OnBoardingBottomBar extends StatelessWidget {
                 Flexible(
 
                   child: TextButton(
-                      onPressed: () => context.read<OnBoardingCubit>().decrement(),
+                      onPressed: () => Navigator.pushNamedAndRemoveUntil(context, Routes.loginScreen, (route) => false),
                       child: const Text('Lewati', style: TextStyle(color: Colors.grey),)
                   ),
                 ) ,

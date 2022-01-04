@@ -2,7 +2,9 @@ import 'package:badges/badges.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibration/vibration.dart';
 
+import '../utils/formz.dart';
 import '../utils/routes.dart';
 import '../utils/app_theme.dart';
 import '../cubit/scanner_cubit.dart';
@@ -39,58 +41,65 @@ class _ScannerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ScannerCubit, ScannerState>(
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.black,
-            body: Stack(
-              children: [
-                const _CameraScannerView(),
-                Positioned(
-                    top: 0,
-                    child: TransparentAppbar(
+    return BlocListener<ScannerCubit, ScannerState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Vibration.vibrate(duration: 200);
+        }
+      },
+      child: BlocBuilder<ScannerCubit, ScannerState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                children: [
+                  const _CameraScannerView(),
+                  Positioned(
+                      top: 0,
+                      child: TransparentAppbar(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Row(
+                            children: [
+                              AppBarButton(
+                                onTap: () => Navigator.pop(context),
+                                icon: Icons.arrow_back,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            const _WasteCountView(),
+                            const _ScannerButton(),
+
                             AppBarButton(
-                              onTap: () => Navigator.pop(context),
-                              icon: Icons.arrow_back,
-                            )
+                                icon: Icons.verified,
+                                onTap: () {
+                                  List<List<String>> images = [state.composeImage, state.reusableImage];
+                                  Navigator.pushNamed(
+                                      context,
+                                      Routes.cartScreen,
+                                    arguments: ScreenArguments<List<List<String>>>(images)
+                                  );
+                                }
+                            ),
                           ],
                         ),
-                      ),
-                    )
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const _WasteCountView(),
-                          const _ScannerButton(),
-
-                          AppBarButton(
-                              icon: Icons.verified,
-                              onTap: () {
-                                List<List<String>> images = [state.composeImage, state.reusableImage];
-                                Navigator.pushNamed(
-                                    context,
-                                    Routes.cartScreen,
-                                  arguments: ScreenArguments<List<List<String>>>(images)
-                                );
-                              }
-                          ),
-                        ],
-                      ),
-                    )
-                )
-              ],
-            ),
-          );
-        }
+                      )
+                  )
+                ],
+              ),
+            );
+          }
+      ),
     );
   }
 }

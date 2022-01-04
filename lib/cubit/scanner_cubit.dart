@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tflite/tflite.dart';
 
+import '../utils/formz.dart';
 import '../utils/helpers/camera_helper.dart';
 
 enum CameraStatus {ready, failure, initial}
@@ -13,25 +14,29 @@ class ScannerState extends Equatable {
 
   final List<String> composeImage;
   final List<String> reusableImage;
+  final FormzStatus status;
 
   const ScannerState({
     this.composeImage = const <String>[],
     this.reusableImage = const <String>[],
-    this.cameraStatus = CameraStatus.initial
+    this.cameraStatus = CameraStatus.initial,
+    this.status = FormzStatus.pure
   });
 
   @override
-  List<Object?> get props => [composeImage, reusableImage, cameraStatus];
+  List<Object?> get props => [composeImage, reusableImage, cameraStatus, status];
 
   ScannerState copyWith({
     List<String>? composeImage,
     List<String>? reusableImage,
-    CameraStatus? cameraStatus
+    CameraStatus? cameraStatus,
+    FormzStatus? status
   }) {
     return ScannerState(
         composeImage: composeImage ?? this.composeImage,
         reusableImage: reusableImage ?? this.reusableImage,
-        cameraStatus: cameraStatus ?? this.cameraStatus
+        cameraStatus: cameraStatus ?? this.cameraStatus,
+      status: status ?? this.status
     );
   }
 }
@@ -78,10 +83,13 @@ class ScannerCubit extends Cubit<ScannerState> {
   }
 
   Future<void> takePicture() async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       final imageCapture = await _controller.takePicture();
       await analyzeImage(imageCapture.path);
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } catch(e) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
       throw Exception(e);
     }
   }
@@ -109,8 +117,9 @@ class ScannerCubit extends Cubit<ScannerState> {
       }
 
     } catch(e) {
-      print(e);
       throw Exception(e);
     }
   }
+
+
 }

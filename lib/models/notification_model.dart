@@ -7,15 +7,17 @@ class NotificationModel {
   final String? address;
   final String? from;
   final String? to;
+  final int? garbageSize;
   final Timestamp? time;
   final GeoPoint? position;
 
-  NotificationModel({this.id, this.title, this.address, this.from, this.whatsapp,this.to, this.time, this.position});
+  NotificationModel({this.id, this.title, this.address, this.from,this.garbageSize, this.whatsapp,this.to, this.time, this.position});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
     id: json['id'],
       title: json['title'],
       to: json['to'],
+      garbageSize: json['garbageSize'],
       whatsapp: json['whatsapp'],
       address: json['address'],
       time: json['time'],
@@ -28,6 +30,7 @@ class NotificationModel {
     'title': title,
     'time': time,
     'to': to,
+    'garbageSize': garbageSize,
     'from': from,
     'address': address,
     'whatsapp': whatsapp,

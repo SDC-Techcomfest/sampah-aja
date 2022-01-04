@@ -49,6 +49,18 @@ class CartCubit extends Cubit<CartState> {
     ));
   }
 
+  deleteAllOrganic() {
+    emit(state.copyWith(
+      organicImage: List.of(state.organicImage)..clear()
+    ));
+  }
+
+  deleteAllReuse() {
+    emit(state.copyWith(
+        reusableImage: List.of(state.reusableImage)..clear()
+    ));
+  }
+
   void deleteImage(bool isOrganic, String value) {
     if (isOrganic) {
       emit(state.copyWith(

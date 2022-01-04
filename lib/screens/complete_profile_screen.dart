@@ -77,10 +77,7 @@ class _CompleteProfileView extends StatelessWidget {
             SizedBox(height: 16),
             _WhatsappNumberInput(),
             SizedBox(height: 16),
-            Positioned(
-              bottom: 0,
-                child: _SubmitButton()
-            )
+            _SubmitButton()
           ],
         ),
       ),

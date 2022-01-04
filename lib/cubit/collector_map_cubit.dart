@@ -46,8 +46,9 @@ class CollectorMapState extends Equatable {
 class CollectorMapCubit extends Cubit<CollectorMapState> {
 
   final bool garbageCollector;
+  final int garbageSize;
 
-  CollectorMapCubit(this.garbageCollector) : super(const CollectorMapState()) {
+  CollectorMapCubit(this.garbageCollector, this.garbageSize) : super(const CollectorMapState()) {
     getCurrentLocation();
 
     if (garbageCollector) {
@@ -97,6 +98,7 @@ class CollectorMapCubit extends Cubit<CollectorMapState> {
           title: 'Ada permintaan pengambilan sampah',
           address: guest.address,
           whatsapp: guest.whatsapp,
+          garbageSize: garbageSize,
           from: guest.name,
           to: id,
           time: Timestamp.now(),

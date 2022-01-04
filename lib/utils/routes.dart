@@ -52,8 +52,11 @@ class Routes {
         final args = settings.arguments as ScreenArguments<List<List<String>>>;
         return MaterialPageRoute(builder: (_) => CartScreen(args: args.data));
       case collectorMapScreen:
-        final args = settings.arguments as ScreenArguments<bool>;
-        return MaterialPageRoute(builder: (_) => CollectorMapScreen(garbageCollector: args.data));
+        final args = settings.arguments as ScreenArguments<Map<String, dynamic>>;
+        return MaterialPageRoute(builder: (_) => CollectorMapScreen(
+            garbageCollector: args.data['garbageCollector'],
+          garbageSize: args.data['garbageSize'],
+        ));
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

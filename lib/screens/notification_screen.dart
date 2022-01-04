@@ -138,7 +138,7 @@ class _NotificationDetailSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          Text(
+          const Text(
               'Nama',
           ),
           const SizedBox(height: 10),
@@ -154,7 +154,7 @@ class _NotificationDetailSheet extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
               notificationModel.address!,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16.0,
               letterSpacing: 0.3
             ),
@@ -165,7 +165,23 @@ class _NotificationDetailSheet extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
           ),
 
-          const SizedBox(height: 48.0),
+          const SizedBox(height: 16),
+          const Text('Jumlah Sampah'),
+          const SizedBox(height: 10),
+          Text(
+            notificationModel.garbageSize!.toString(),
+            style: const TextStyle(
+                fontSize: 16.0,
+                letterSpacing: 0.3
+            ),
+          ),
+          const SizedBox(height: 10),
+          Divider(
+            height: 1,
+            color: Colors.grey.withOpacity(0.5),
+          ),
+
+          const SizedBox(height: 24.0),
           CommonButton(
             title: 'Tandai telah diterima',
             onTap: () {
